@@ -16,7 +16,24 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstring>
 using namespace std;
+
+void NewGame()
+{
+
+}
+
+void AddWordToDictionary()
+{
+    string newWord;
+    ofstream outfile;
+    outfile.open("words.txt", ios::app);
+    cout << "Write a word to add to the dictionary: ";
+    cin >> newWord;
+    outfile << "\n" << newWord;
+    return;
+}
 
 void MainMenu()
 {
@@ -35,7 +52,7 @@ void MainMenu()
         {
         case 1:
         {
-
+            NewGame();
             break;
         }
         case 2:
@@ -45,13 +62,12 @@ void MainMenu()
         }
         case 3:
         {
-
+            AddWordToDictionary();
             break;
         }
         case 4:
         {
-
-            break;
+            return;
         }
         default:
             cout << "Invalid action! Choose again. ";

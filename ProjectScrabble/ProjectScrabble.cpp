@@ -20,11 +20,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <Windows.h>
+#include <string>
 using namespace std;
 
-void Round(int numberOfLetters, int shuffles, int roundCounter, int &score)
+void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score)
 {
     srand(time(NULL));
+    ifstream Myfile;
+    string line;
     cout << "Round " << roundCounter << ":" << endl;
     cout << "Available letters:";
     char* roundLetters = new char[numberOfLetters];
@@ -37,46 +40,81 @@ void Round(int numberOfLetters, int shuffles, int roundCounter, int &score)
         cout << " " << roundLetters[i];
     }
     cout << endl;
-    cout << "Type a word with available letters or use a shuffle: ";
+    cout << "Type a word with available letters or type 0 to use a shuffle: ";
     bool thereIsInvalidWord;
+    bool existsInDictionary;
     for (int i = 0; i < 3; i++)
     {
+        existsInDictionary = 0;
         thereIsInvalidWord = 0;
         string word;
         cin >> word;
-        for (int i = 0; i < word.length(); i++)
+        if (word == "0" && shuffles != 0)
         {
-            for (int j = 0; j < numberOfLetters; j++)
+            shuffles -= 1;
+            cout << "Remaining shuffles: " << shuffles << endl;
+            roundCounter--;
+            break;
+        }
+        else if (word == "0" && shuffles == 0)
+        {
+            do {
+                cout << "No shuffles remaining. Type a word. ";
+                word.clear();
+                cin >> word;
+            } while (word == "0");
+        }
+        Myfile.open("words.txt");
+
+        while (getline(Myfile, line))
+        {
+            if (line == word)
+                existsInDictionary = 1;
+        }
+        Myfile.close();
+        if (existsInDictionary != 1)
+        {
+            thereIsInvalidWord = 1;
+        }
+            for (size_t z = 0; z < word.length(); z++)
             {
-                if (word[i] == roundLetters[j])
+                for (int j = 0; j < numberOfLetters; j++)
                 {
-                    roundLetters[j] = 0;
+                    if (word[z] == roundLetters[j])
+                    {
+                        roundLetters[j] = 0;
+                        break;
+                    }
+                    else if (j == numberOfLetters - 1)
+                    {
+                        thereIsInvalidWord = 1;
+                        break;
+                    }
                 }
-                else
+
+                if (thereIsInvalidWord)
                 {
-                    cout << "Invalid word. Try again: ";
-                    thereIsInvalidWord = 1;
+                    if (i < 2)
+                    {
+                        cout << "Invalid word. Use a shuffle or try again: ";
+                    }
                     break;
                 }
             }
-            if (thereIsInvalidWord)
+            if (i == 2 && thereIsInvalidWord)
+            {
+                cout << "Invalid word. No remaining tries." << endl;
+            }
+            else if (!thereIsInvalidWord)
+            {
+                score += word.length();
+                cout << "Your points so far are " << score << endl;
+                cout << "Next round:" << endl;
                 break;
-        }
-        if (i == 2 && thereIsInvalidWord)
-        {
-            cout << "Invalid word. No remaining tries." << endl;
-            return;
-        }
-        else if (i == 2 && !thereIsInvalidWord)
-        {
-            cout << "Your points so far are " << score + word.length();
-            cout << "Next round:" << endl;
-            return;
-        }
-            
+            }  
     }
+    delete[] roundLetters;
 }
-
 void NewGame(int rounds, int numberOfLetters, int shuffles)
 {
     system("CLS");
@@ -85,6 +123,11 @@ void NewGame(int rounds, int numberOfLetters, int shuffles)
     {
         Round(numberOfLetters, shuffles, roundCounter, score);
     }
+    cout << "Your total points are: " << score << endl;
+    cout << "Return to main menu?" << endl;
+    while (!(GetKeyState('A') & 0x8000))
+        continue;
+    return;
 }
 
 void Settings(int &rounds, int &numberOfLetters, int &shuffles)
@@ -109,8 +152,6 @@ void Settings(int &rounds, int &numberOfLetters, int &shuffles)
 
             int actionChangeLetters;
             cout << "Choose desired option. ";
-            
-
             do {
                 cin >> actionChangeLetters;
                 switch (actionChangeLetters)
@@ -244,6 +285,7 @@ void MainMenu(int Rounds, int NumberOfLetters, int Shuffles)
         case 1:
         {
             NewGame(Rounds, NumberOfLetters, Shuffles);
+            MainMenu(Rounds, NumberOfLetters, Shuffles);
             break;
         }
         case 2:

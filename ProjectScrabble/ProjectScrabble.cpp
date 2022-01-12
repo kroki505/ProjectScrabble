@@ -18,11 +18,73 @@
 #include <fstream>
 #include <cstring>
 #include <stdlib.h>
+#include <time.h>
+#include <Windows.h>
 using namespace std;
+
+void Round(int numberOfLetters, int shuffles, int roundCounter, int &score)
+{
+    srand(time(NULL));
+    cout << "Round " << roundCounter << ":" << endl;
+    cout << "Available letters:";
+    char* roundLetters = new char[numberOfLetters];
+    for (int i = 0; i < numberOfLetters; i++)
+    {
+        roundLetters[i] = 97 + (rand() % 26);
+    }
+    for (int i = 0; i < numberOfLetters; i++)
+    {
+        cout << " " << roundLetters[i];
+    }
+    cout << endl;
+    cout << "Type a word with available letters or use a shuffle: ";
+    bool thereIsInvalidWord;
+    for (int i = 0; i < 3; i++)
+    {
+        thereIsInvalidWord = 0;
+        string word;
+        cin >> word;
+        for (int i = 0; i < word.length(); i++)
+        {
+            for (int j = 0; j < numberOfLetters; j++)
+            {
+                if (word[i] == roundLetters[j])
+                {
+                    roundLetters[j] = 0;
+                }
+                else
+                {
+                    cout << "Invalid word. Try again: ";
+                    thereIsInvalidWord = 1;
+                    break;
+                }
+            }
+            if (thereIsInvalidWord)
+                break;
+        }
+        if (i == 2 && thereIsInvalidWord)
+        {
+            cout << "Invalid word. No remaining tries." << endl;
+            return;
+        }
+        else if (i == 2 && !thereIsInvalidWord)
+        {
+            cout << "Your points so far are " << score + word.length();
+            cout << "Next round:" << endl;
+            return;
+        }
+            
+    }
+}
 
 void NewGame(int rounds, int numberOfLetters, int shuffles)
 {
     system("CLS");
+    int score = 0;
+    for (int roundCounter = 1; roundCounter <= rounds; roundCounter++)
+    {
+        Round(numberOfLetters, shuffles, roundCounter, score);
+    }
 }
 
 void Settings(int &rounds, int &numberOfLetters, int &shuffles)

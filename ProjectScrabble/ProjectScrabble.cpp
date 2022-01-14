@@ -32,7 +32,7 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, in
     cout << "Round " << roundCounter << ":" << endl;
     cout << "Available letters:";
     char* roundLetters = new char[numberOfLetters];
-    for (int i = 0; i < numberOfLetters; i++)
+    for (int i = 0; i < numberOfLetters; i++) // Creates only numbers whose ascii table values are small letters
     {
         roundLetters[i] = 97 + (rand() % 26);
     }
@@ -50,7 +50,7 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, in
         thereIsInvalidWord = 0;
         string word;
         cin >> word;
-        if (word == "0" && shuffles != 0)
+        if (word == "0" && shuffles != 0) // If shuffles are available reduce the roundCounter and start a new round with new letters
         {
             shuffles -= 1;
             cout << "Remaining shuffles: " << shuffles << endl;
@@ -67,7 +67,7 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, in
         }
         Myfile.open("words.txt");
 
-        while (getline(Myfile, line))
+        while (getline(Myfile, line)) // Checks to see if the written word exists in the dictionary
         {
             if (line == word)
                 existsInDictionary = 1;
@@ -81,12 +81,12 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, in
             {
                 for (int j = 0; j < numberOfLetters; j++)
                 {
-                    if (word[z] == roundLetters[j])
+                    if (word[z] == roundLetters[j]) // Each letter that has been used is removed from the initial available letters
                     {
                         roundLetters[j] = 0;
                         break;
                     }
-                    else if (j == numberOfLetters - 1)
+                    else if (j == numberOfLetters - 1) // If it reaches the end and it hasn't found a letter in triggers a flag
                     {
                         thereIsInvalidWord = 1;
                         break;
@@ -102,11 +102,15 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, in
                     break;
                 }
             }
-            if (i == 2 && thereIsInvalidWord)
+            if (i == 2 && thereIsInvalidWord) // If an invalid word has been written 3 times force skip to next round
             {
                 cout << "Invalid word. No remaining tries." << endl;
+                if (roundCounter == rounds)
+                    break;
+                cout << "Your points so far are " << score << endl;
+                cout << "Next round:" << endl;
             }
-            else if (!thereIsInvalidWord)
+            else if (!thereIsInvalidWord) // If a valid word has been written update score and go to next round
             {
                 score += word.length();
                 if (roundCounter == rounds)
@@ -280,6 +284,7 @@ void AddWordToDictionary()
     cout << "Write a word to add to the dictionary: ";
     cin >> newWord;
     outfile << "\n" << newWord;
+    outfile.close();
     return;
 }
 

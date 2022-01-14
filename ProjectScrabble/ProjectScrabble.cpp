@@ -21,11 +21,12 @@
 #include <time.h>
 #include <Windows.h>
 #include <string>
+#include "Log.h"
 using namespace std;
 
-void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score)
+void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, int &rounds)
 {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     ifstream Myfile;
     string line;
     cout << "Round " << roundCounter << ":" << endl;
@@ -108,6 +109,8 @@ void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score)
             else if (!thereIsInvalidWord)
             {
                 score += word.length();
+                if (roundCounter == rounds)
+                    break;
                 cout << "Your points so far are " << score << endl;
                 cout << "Next round:" << endl;
                 break;
@@ -121,13 +124,117 @@ void NewGame(int rounds, int numberOfLetters, int shuffles)
     int score = 0;
     for (int roundCounter = 1; roundCounter <= rounds; roundCounter++)
     {
-        Round(numberOfLetters, shuffles, roundCounter, score);
+        Round(numberOfLetters, shuffles, roundCounter, score, rounds);
     }
     cout << "Your total points are: " << score << endl;
     cout << "Return to main menu?" << endl;
-    while (!(GetKeyState('A') & 0x8000))
-        continue;
+    system("Pause");
     return;
+}
+
+void ChangeNumberOfLetters(int& numberOfLetters)
+{
+    system("CLS");
+    cout << "1. Change number of letters per round to 10" << endl;
+    cout << "2. Change number of letters per round to 15" << endl;
+    cout << "3. Change number of letters per round to 20" << endl;
+
+    int actionChangeLetters;
+    cout << "Choose desired option. ";
+    do {
+        cin >> actionChangeLetters;
+        switch (actionChangeLetters)
+        {
+        case 1:
+        {
+            numberOfLetters = 10;
+            break;
+        }
+        case 2:
+        {
+            numberOfLetters = 15;
+            break;
+        }
+        case 3:
+        {
+            numberOfLetters = 20;
+            break;
+        }
+        default:
+            cout << "Invalid action! Choose again. ";
+        }
+    } while (actionChangeLetters < 1 || actionChangeLetters > 3);
+}
+
+void ChangeNumberOfRounds(int& rounds)
+{
+    system("CLS");
+    cout << "1. Change number of rounds to 5." << endl;
+    cout << "2. Change number of rounds to 7." << endl;
+    cout << "3. Change number of rounds to 10." << endl;
+
+    int actionChangeRounds;
+    cout << "Choose desired option. ";
+
+
+    do {
+        cin >> actionChangeRounds;
+        switch (actionChangeRounds)
+        {
+        case 1:
+        {
+            rounds = 5;
+            break;
+        }
+        case 2:
+        {
+            rounds = 7;
+            break;
+        }
+        case 3:
+        {
+            rounds = 10;
+            break;
+        }
+        default:
+            cout << "Invalid action! Choose again. ";
+        }
+    } while (actionChangeRounds < 1 || actionChangeRounds > 3);
+}
+
+void ChangeNumberOfShuffles(int& shuffles)
+{
+    system("CLS");
+    cout << "1. Change number of shuffles to 1." << endl;
+    cout << "2. Change number of shuffles to 2." << endl;
+    cout << "3. Change number of shuffles to 3." << endl;
+
+    int actionChangeShuffles;
+    cout << "Choose desired option. ";
+
+    do {
+        cin >> actionChangeShuffles;
+        switch (actionChangeShuffles)
+        {
+        case 1:
+        {
+            shuffles = 1;
+            break;
+        }
+        case 2:
+        {
+            shuffles = 2;
+            break;
+        }
+        case 3:
+        {
+            shuffles = 3;
+            break;
+        }
+        default:
+            cout << "Invalid action! Choose again. ";
+        }
+    } while (actionChangeShuffles < 1 || actionChangeShuffles > 3);
 }
 
 void Settings(int &rounds, int &numberOfLetters, int &shuffles)
@@ -145,107 +252,17 @@ void Settings(int &rounds, int &numberOfLetters, int &shuffles)
         {
         case 1:
         {
-            system("CLS");
-            cout << "1. Change number of letters per round to 10" << endl;
-            cout << "2. Change number of letters per round to 15" << endl;
-            cout << "3. Change number of letters per round to 20" << endl;
-
-            int actionChangeLetters;
-            cout << "Choose desired option. ";
-            do {
-                cin >> actionChangeLetters;
-                switch (actionChangeLetters)
-                {
-                case 1:
-                {
-                    numberOfLetters = 10;
-                    break;
-                }
-                case 2:
-                {
-                    numberOfLetters = 15;
-                    break;
-                }
-                case 3:
-                {
-                    numberOfLetters = 20;
-                    break;
-                }
-                default:
-                    cout << "Invalid action! Choose again. ";
-                }
-            } while (actionChangeLetters < 1 || actionChangeLetters > 3);
+            ChangeNumberOfLetters(numberOfLetters);
             break;
         }
         case 2:
         {
-            system("CLS");
-            cout << "1. Change number of rounds to 5." << endl;
-            cout << "2. Change number of rounds to 7." << endl;
-            cout << "3. Change number of rounds to 10." << endl;
-
-            int actionChangeRounds;
-            cout << "Choose desired option. ";
-            
-
-            do {
-                cin >> actionChangeRounds;
-                switch (actionChangeRounds)
-                {
-                case 1:
-                {
-                    rounds = 5;
-                    break;
-                }
-                case 2:
-                {
-                    rounds = 7;
-                    break;
-                }
-                case 3:
-                {
-                    rounds = 10;
-                    break;
-                }
-                default:
-                    cout << "Invalid action! Choose again. ";
-                }
-            } while (actionChangeRounds < 1 || actionChangeRounds > 3);
+            ChangeNumberOfRounds(rounds);
             break;
         }
         case 3:
         {
-            system("CLS");
-            cout << "1. Change number of shuffles to 1." << endl;
-            cout << "2. Change number of shuffles to 2." << endl;
-            cout << "3. Change number of shuffles to 3." << endl;
-
-            int actionChangeShuffles;
-            cout << "Choose desired option. ";
-            
-            do {
-                cin >> actionChangeShuffles;
-                switch (actionChangeShuffles)
-                {
-                case 1:
-                {
-                    shuffles = 1;
-                    break;
-                }
-                case 2:
-                {
-                    shuffles = 2;
-                    break;
-                }
-                case 3:
-                {
-                    shuffles = 3;
-                    break;
-                }
-                default:
-                    cout << "Invalid action! Choose again. ";
-                }
-            } while (actionChangeShuffles < 1 || actionChangeShuffles > 3);
+            ChangeNumberOfShuffles(shuffles);
             break;
         }
         default:

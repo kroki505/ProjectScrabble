@@ -9,7 +9,7 @@
 * @idnumber 0MI0600111
 * @compiler VC
 *
-* <file with helper functions>
+* <main file>
 *
 */
 

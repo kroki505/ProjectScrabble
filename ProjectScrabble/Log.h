@@ -1,5 +1,11 @@
 #pragma once
 
+bool WordExistsInDictionary(string& word);
+
+bool WordIsCorrect(int wordLength, int numberOfLetters, string word, char roundLetters[], int numberOfTriesLeft);
+
+bool Shuffle(int& shuffles, int& roundCounter, string& word);
+
 void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, int& rounds);
 
 void NewGame(int rounds, int numberOfLetters, int shuffles);

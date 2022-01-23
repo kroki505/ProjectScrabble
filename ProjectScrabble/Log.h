@@ -1,10 +1,10 @@
 #pragma once
 
-bool WordExistsInDictionary(string& word);
+bool WordExistsInDictionary(std::string& word);
 
-bool WordIsCorrect(int wordLength, int numberOfLetters, string word, char roundLetters[], int numberOfTriesLeft);
+bool WordIsCorrect(int wordLength, int numberOfLetters, std::string word, char roundLetters[], int numberOfTriesLeft);
 
-bool Shuffle(int& shuffles, int& roundCounter, string& word);
+bool Shuffle(int& shuffles, int& roundCounter, std::string& word);
 
 void Round(int numberOfLetters, int& shuffles, int& roundCounter, int& score, int& rounds);
 
